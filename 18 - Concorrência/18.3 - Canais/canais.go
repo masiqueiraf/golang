@@ -10,13 +10,11 @@ func main() {
 	canal := make(chan string)
 	go escrever("Olá mundo!", canal)
 
-	for {
-		mensagem, aberto := <-canal
-		if !aberto {
-			break
-		}
+	for mensagem := range canal {
 		fmt.Println(mensagem)
 	}
+
+	fmt.Println("Fim do programa!")
 }
 
 func escrever(texto string, canal chan string) {
