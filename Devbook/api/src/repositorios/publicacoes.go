@@ -3,6 +3,7 @@ package repositorios
 import (
 	"api/src/modelos"
 	"database/sql"
+	"fmt"
 )
 
 // Publicacoes repositorio de publicacoes
@@ -39,7 +40,7 @@ func (repositorios Publicacoes) Criar(publicacao modelos.Publicacao) (uint64, er
 }
 
 // BuscarPorID traz uma única publicação do banco de dados
-func (repositorio *Publicacoes) BuscarPorID(publicacaoID uint64) (modelos.Publicacao, error) {
+func (repositorio Publicacoes) BuscarPorID(publicacaoID uint64) (modelos.Publicacao, error) {
 	linha, erro := repositorio.db.Query(`
 		select p.*, u.nick from publicacoes p inner join usuarios u on u.id = p.autor_id where p.id = ?`, publicacaoID)
 	if erro != nil {
@@ -66,7 +67,7 @@ func (repositorio *Publicacoes) BuscarPorID(publicacaoID uint64) (modelos.Public
 }
 
 // Buscar traz as publicações dos usuários seguidos e também do próprio usuário que fez a requisição
-func (repositorio *Publicacoes) Buscar(usuarioID uint64) ([]modelos.Publicacao, error) {
+func (repositorio Publicacoes) Buscar(usuarioID uint64) ([]modelos.Publicacao, error) {
 	linhas, erro := repositorio.db.Query(`
 		select distinct p.*, u.nick from publicacoes p 
 		inner join usuarios u on u.id = p.autor_id 
@@ -101,7 +102,7 @@ func (repositorio *Publicacoes) Buscar(usuarioID uint64) ([]modelos.Publicacao, 
 }
 
 // AtualizarPublicacao altera os dados de uma publicação no banco de dados
-func (repositorio *Publicacoes) AtualizarPublicacao(publicacaoId uint64, publicacao modelos.Publicacao) error {
+func (repositorio Publicacoes) AtualizarPublicacao(publicacaoId uint64, publicacao modelos.Publicacao) error {
 	statement, erro := repositorio.db.Prepare("update publicacoes set titulo = ?, conteudo = ? where id = ?")
 	if erro != nil {
 		return erro
@@ -111,6 +112,22 @@ func (repositorio *Publicacoes) AtualizarPublicacao(publicacaoId uint64, publica
 	if _, erro = statement.Exec(publicacao.Titulo, publicacao.Conteudo, publicacaoId); erro != nil {
 		return erro
 	}
+
+	return nil
+}
+
+// Deletar exclui uma publicação do banco de dados
+func (repositorio Publicacoes) Deletar(publicacaoID uint64) error {
+	statement, erro := repositorio.db.Prepare("delete from publicacoes where id = ?")
+	if erro != nil {
+		return erro
+	}
+	defer statement.Close()
+
+	if _, erro = statement.Exec(publicacaoID); erro != nil {
+		return erro
+	}
+	fmt.Println("Deletou")
 
 	return nil
 }
