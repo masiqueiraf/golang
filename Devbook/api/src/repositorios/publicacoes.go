@@ -99,3 +99,18 @@ func (repositorio *Publicacoes) Buscar(usuarioID uint64) ([]modelos.Publicacao, 
 
 	return publicacoes, nil
 }
+
+// AtualizarPublicacao altera os dados de uma publicação no banco de dados
+func (repositorio *Publicacoes) AtualizarPublicacao(publicacaoId uint64, publicacao modelos.Publicacao) error {
+	statement, erro := repositorio.db.Prepare("update publicacoes set titulo = ?, conteudo = ? where id = ?")
+	if erro != nil {
+		return erro
+	}
+	defer statement.Close()
+
+	if _, erro = statement.Exec(publicacao.Titulo, publicacao.Conteudo, publicacaoId); erro != nil {
+		return erro
+	}
+
+	return nil
+}
