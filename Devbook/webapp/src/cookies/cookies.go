@@ -7,7 +7,7 @@ import (
 	"github.com/gorilla/securecookie"
 )
 
-var s *securecookie.SecureCookie = securecookie.New(securecookie.GenerateRandomKey(64), securecookie.GenerateRandomKey(32))
+var s *securecookie.SecureCookie
 
 // Configurar utiliza as variáveis de ambiente para a criação do SecureCookie
 func Configurar() {
