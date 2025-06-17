@@ -47,5 +47,5 @@ func FazerLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	respostas.JSON(w, http.StatusOK, nil)
+	respostas.JSON(w, http.StatusNoContent, nil)
 }

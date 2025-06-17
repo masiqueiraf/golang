@@ -6,6 +6,8 @@
     <title>DevBook</title>
 
     <link rel="stylesheet" href="/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
 </head>
 <body>
     
@@ -31,13 +33,11 @@
         </div>
         <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
             {{ range .Publicacoes }}
-            <div class="jumbotron">
-                <h1 class="display-4">{{ .Titulo }}</h1>
-                <p class="lead">{{ .Conteudo }}</p>
-                <a href="#">{{ .AutorNick }} - {{ .CriadaEm }}</a>
-                <hr class="my-4">
-                <p>Botões</p>
-            </div>
+                {{ if (eq .AutorID $.UsuarioID) }}
+                    {{ template "publicacao-com-permissao" . }}
+                {{ else }}
+                    {{ template "publicacao-sem-permissao" . }}
+                {{ end }}
             {{ end }}
         </div>
     </div>
@@ -45,8 +45,6 @@
 
 {{ template "rodape" }}
 {{ template "scripts" }}
-
-<script src="/assets/js/publicacoes.js"></script>
 
 </body>
 </html>

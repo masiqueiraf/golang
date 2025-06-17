@@ -10,9 +10,9 @@ function fazerLogin(evento) {
             email: $('#email').val(),
             senha: $('#senha').val(),
         }
-    }).done(function() {
+    }).done(function(response) {
         window.location = "/home";
-    }).fail(function() {
-        alert("Usuário ou senha inválidos!");
+    }).fail(function(erro) {
+        Swal.fire("Ops...", "Usuário ou senha incorretos!", "error");
     });
 }

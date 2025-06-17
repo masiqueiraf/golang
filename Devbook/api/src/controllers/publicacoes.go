@@ -8,6 +8,7 @@ import (
 	"api/src/respostas"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -79,7 +80,7 @@ func BuscarPublicoes(w http.ResponseWriter, r *http.Request) {
 		respostas.Erro(w, http.StatusInternalServerError, erro)
 		return
 	}
-
+	fmt.Println(publicacoes)
 	respostas.JSON(w, http.StatusOK, publicacoes)
 }
 
